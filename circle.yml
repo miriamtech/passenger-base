@@ -11,17 +11,17 @@ dependencies:
   override:
     - build/touch_git_commit scripts
     - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
-    - docker build -t $DOCKER_IMAGE:$CIRCLE_SHA1 .
-    - mkdir -p ~/docker; docker save $DOCKER_IMAGE:$CIRCLE_SHA1 > ~/docker/image.tar
+    - docker build -t $DOCKER_IMAGE .
+    - mkdir -p ~/docker; docker save $DOCKER_IMAGE:latest > ~/docker/image.tar
 
 test:
   override:
-    - docker run $DOCKER_IMAGE:$CIRCLE_SHA1 /sbin/my_init -- echo "Success"
+    - docker run $DOCKER_IMAGE:latest /sbin/my_init -- echo "Success"
 
 deployment:
   hub:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker tag $DOCKER_IMAGE:$CIRCLE_SHA1 $DOCKER_IMAGE:latest
+      - docker tag $DOCKER_IMAGE:latest $DOCKER_IMAGE:${CIRCLE_SHA1:0:6}
       - docker push $DOCKER_IMAGE
