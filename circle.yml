@@ -1,0 +1,37 @@
+machine:
+  environment:
+    DOCKER_IMAGE: miriamtech/passenger-base
+  timezone: America/Los_Angeles
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  override:
+    - build/touch_git_commit scripts
+    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
+    - docker build -t $DOCKER_IMAGE:$CIRCLE_SHA1 .
+    - mkdir -p ~/docker; docker save $DOCKER_IMAGE:$CIRCLE_SHA1 > ~/docker/image.tar
+
+database:
+  override:
+    - sudo bash -c "echo \"listen_addresses = '*'\" >> /etc/postgresql/9.4/main/postgresql.conf"
+    - sudo bash -c "echo \"host all all 0.0.0.0/0 trust\" >> /etc/postgresql/9.4/main/pg_hba.conf"
+    - sudo service postgresql restart
+    - sed -i.bak 's/127.0.0.1/0.0.0.0/' /etc/riak/app.config
+    - sudo service riak restart
+    - psql -c "CREATE USER glassnet_test SUPERUSER PASSWORD 'password'"
+    - docker run --env-file=$HOME/docker.env glassnet/rails:$CIRCLE_SHA1 rake db:setup
+
+test:
+  override:
+    - docker run $DOCKER_IMAGE:$CIRCLE_SHA1 /sbin/my_init -- echo "Success"
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag $DOCKER_IMAGE:$CIRCLE_SHA1 $DOCKER_IMAGE:latest
+      - docker push $DOCKER_IMAGE
