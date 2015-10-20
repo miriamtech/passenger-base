@@ -6,6 +6,12 @@ RUN apt-get update \
     && apt-get -y upgrade -o Dpkg::Options::="--force-confold" \
     && apt-get clean
 
+# Install latest rubygems and bundler
+RUN gem update --system \
+    && gem uninstall bundler rubygems-update \
+    && gem install bundler \
+    && gem pristine --all
+
 # Setup Nginx and Passenger
 RUN rm -f /etc/service/nginx/down
 RUN rm /etc/nginx/sites-enabled/default
