@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby22:0.9.18
+FROM phusion/passenger-ruby22:0.9.19
 CMD ["/sbin/my_init"]
 
 RUN apt-get update \
@@ -8,7 +8,7 @@ RUN apt-get update \
 
 # Install latest rubygems and bundler
 RUN gem update --system \
-    && gem uninstall bundler rubygems-update \
+    && gem uninstall rubygems-update \
     && gem install bundler \
     && gem pristine --all
 
@@ -21,7 +21,7 @@ RUN setuser app ruby -S passenger-config build-native-support
 
 # Enable unattended-upgrades
 RUN echo unattended-upgrades unattended-upgrades/enable_auto_updates select true | debconf-set-selections \
-    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure unattended-upgrades \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install unattended-upgrades \
     && apt-get -y install update-notifier-common
 ADD scripts/cron-restart.sh /etc/cron.daily/restart-nginx-if-necessary
 
