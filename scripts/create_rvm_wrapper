@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 name ..."
+  exit 1
+fi
+
+source=/usr/bin/ruby
+
+for name in $*; do
+  wrapper=/usr/bin/$name;
+  sed -e "s/ruby/$name/" $source > $wrapper
+  chmod +x $wrapper
+done

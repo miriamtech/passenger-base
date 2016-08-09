@@ -30,3 +30,8 @@ RUN dpkg-divert --add --rename --divert /usr/sbin/nginx.real /usr/sbin/nginx \
     && dpkg-divert --add --divert /etc/init.d/nginx.orig /etc/init.d/nginx \
     && sed -i.orig -e 's/\/usr\/sbin\/nginx$/\/usr\/sbin\/nginx.real/' -e 's/NAME\=nginx$/NAME\=nginx.real/' /etc/service/nginx/run /etc/init.d/nginx
 ADD scripts/policy-rc.d.rb /usr/sbin/policy-rc.d
+
+# Clone RVM ruby wrapper script for additional executables
+# See https://github.com/phusion/passenger-docker#default-wrapper-scripts
+ADD scripts/create_rvm_wrapper /usr/local/bin
+RUN create_rvm_wrapper irb rails
