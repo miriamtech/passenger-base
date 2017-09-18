@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby23:0.9.19
+FROM phusion/passenger-ruby24:0.9.25
 CMD ["/sbin/my_init"]
 
 RUN apt-get update \
