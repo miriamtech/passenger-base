@@ -37,4 +37,4 @@ ADD scripts/policy-rc.d.rb /usr/sbin/policy-rc.d
 # Clone RVM ruby wrapper script for additional executables
 # See https://github.com/phusion/passenger-docker#default-wrapper-scripts
 ADD scripts/create_rvm_wrapper /usr/local/bin/create_rvm_wrapper
-RUN create_rvm_wrapper irb rails
+RUN create_rvm_wrapper irb rails que
