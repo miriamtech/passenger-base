@@ -12,6 +12,9 @@ RUN gem update --system \
     && gem install bundler \
     && gem pristine --all
 
+# Install tzdata. passenger-ruby24 doesn't have it by default.
+RUN apt-get install -y tzdata
+
 # Setup Nginx and Passenger
 RUN rm -f /etc/service/nginx/down
 RUN rm /etc/nginx/sites-enabled/default
