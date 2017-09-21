@@ -1,0 +1,35 @@
+#!/usr/bin/ruby
+options = {
+  '--host' => 'smtp.postmarkapp.com',
+  '--from' => ENV['FROM_EMAIL'],
+  '--user' => ENV['POSTMARK_API_TOKEN'],
+  '--passwordeval' => "\"echo $POSTMARK_API_TOKEN\"",
+  '--auth' => 'on'
+}
+other_args = []
+
+i = 0
+while i < ARGV.size
+  if ARGV[i] == '-f'
+    options['--from'] = ARGV[i+1]
+    i += 1
+  elsif matches = ARGV[i].match(/^--([a-z]+)=(.+)$/)
+    options["--#{matches[1]}"] = matches[2]
+  else
+    other_args << ARGV[i]
+  end
+  i += 1
+end
+
+option_string = options.collect { |key, value| "#{key}=#{value}" }.join(' ')
+arg_string = other_args.join(' ')
+
+IO.popen("msmtp #{option_string} #{arg_string}", 'w') do |msmtp|
+  STDIN.each_line do |line|
+    if line =~ /^From:/
+      msmtp.write("From: #{options['--from']}\n")
+    else
+      msmtp.write(line)
+    end
+  end
+end

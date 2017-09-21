@@ -15,6 +15,11 @@ RUN gem update --system \
 # Install tzdata. passenger-ruby24 doesn't have it by default.
 RUN apt-get install -y tzdata
 
+# Add postmark_sendmail files for mailing from cron
+RUN apt-get install -y msmtp
+ADD scripts/postmark_sendmail /usr/local/bin/postmark_sendmail
+RUN ln -s /usr/local/bin/postmark_sendmail /usr/sbin/sendmail
+
 # Setup Nginx and Passenger
 RUN rm -f /etc/service/nginx/down
 RUN rm /etc/nginx/sites-enabled/default
