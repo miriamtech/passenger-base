@@ -37,7 +37,7 @@ ADD scripts/cron-restart.sh /etc/cron.daily/restart-nginx-if-necessary
 RUN dpkg-divert --add --rename --divert /usr/sbin/nginx.real /usr/sbin/nginx \
     && dpkg-divert --add --divert /etc/init.d/nginx.orig /etc/init.d/nginx \
     && sed -i.orig -e 's/\/usr\/sbin\/nginx$/\/usr\/sbin\/nginx.real/' -e 's/NAME\=nginx$/NAME\=nginx.real/' /etc/service/nginx/run /etc/init.d/nginx \
-    && sed -i -e 's/sv 1 nginx/killall -HUP nginx.real/' /etc/logrotate.d/nginx
+    && sed -i -e 's/sv 1 nginx/killall -USR1 nginx.real/' /etc/logrotate.d/nginx
 ADD scripts/policy-rc.d.rb /usr/sbin/policy-rc.d
 
 # Clone RVM ruby wrapper script for additional executables
