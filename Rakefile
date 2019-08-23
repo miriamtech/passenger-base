@@ -24,14 +24,9 @@ task :test do
   sh "docker run --rm #{IMAGE_NAME}#{BUILD_TAG} /sbin/my_init -- echo 'Success'"
 end
 
-task :push_latest do
+task :push do
   push_all
   push_all('latest')
-end
-
-task :push_deployed do
-  pull_all # In case BUILD_TAG version has been removed
-  push_all('deployed')
 end
 
 def push_all(tag = nil)
