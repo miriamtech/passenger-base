@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby25:1.0.9
+FROM phusion/passenger-ruby25:1.0.12
 CMD ["/sbin/my_init"]
 
 RUN apt-get update \
@@ -11,9 +11,6 @@ RUN gem update --system \
     && gem uninstall rubygems-update \
     && gem install bundler \
     && gem pristine --all
-
-# Install tzdata. passenger-ruby24 doesn't have it by default.
-RUN apt-get install -y tzdata
 
 # Add postmark_sendmail files for mailing from cron
 RUN apt-get install -y msmtp
