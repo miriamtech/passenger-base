@@ -4,7 +4,8 @@ options = {
   '--from' => ENV['DEFAULT_SENDMAIL_FROM'],
   '--user' => ENV['POSTMARK_API_TOKEN'],
   '--passwordeval' => "\"echo $POSTMARK_API_TOKEN\"",
-  '--auth' => 'on'
+  '--auth' => 'on',
+  '--tls' => 'on'
 }
 other_args = []
 
