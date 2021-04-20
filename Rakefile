@@ -15,7 +15,12 @@ ENV['BUILD_TAG'] = BUILD_TAG
 task :default => :test
 
 task :build do
-  sh "docker build -t #{IMAGE_NAME}#{BUILD_TAG} #{ROOT_DIR}"
+  build_args = [
+    '--force-rm',
+    "-t #{IMAGE_NAME}#{BUILD_TAG}",
+  ]
+  build_args << '--no-cache' unless (ENV['DOCKER_BUILD_NO_CACHE'] || '').empty?
+  sh "docker build #{build_args.join(' ')} #{ROOT_DIR}"
 end
 
 task :full => [:clobber, :build]
