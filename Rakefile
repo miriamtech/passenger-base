@@ -8,7 +8,7 @@ VARIANTS = {
   'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{UPSTREAM_VERSION}" },
 }
 ROOT_DIR = File.expand_path('.')
-BUILD_TAG = (ENV['GO_REVISION_GITHUB'] || '').slice(0, 7)
+BUILD_TAG = ENV['GO_REVISION_GITHUB'] ? ":#{ENV['GO_REVISION_GITHUB'].slice(0, 7)}" : ''
 
 task :default => :test
 
