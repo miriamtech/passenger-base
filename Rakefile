@@ -1,32 +1,35 @@
 require 'rake/clean'
 require 'tempfile'
 
-PROJECT_NAME = 'passenger-base'
-IMAGE_NAME = "miriamtech/#{PROJECT_NAME}"
+UPSTREAM_VERSION = '1.0.14'
+VARIANTS = {
+  'miriamtech/passenger-ruby25': { from: "phusion/passenger-ruby25:#{UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby27': { from: "phusion/passenger-ruby27:#{UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{UPSTREAM_VERSION}" },
+}
 ROOT_DIR = File.expand_path('.')
-
-if revision = ENV['GO_REVISION_GITHUB']
-  BUILD_TAG =":#{revision[0,7]}"
-else
-  BUILD_TAG = ""
-end
-ENV['BUILD_TAG'] = BUILD_TAG
+BUILD_TAG = (ENV['GO_REVISION_GITHUB'] || '').slice(0, 7)
 
 task :default => :test
 
 task :build do
-  build_args = [
-    '--force-rm',
-    "-t #{IMAGE_NAME}#{BUILD_TAG}",
-  ]
-  build_args << '--no-cache' unless (ENV['DOCKER_BUILD_NO_CACHE'] || '').empty?
-  sh "docker build #{build_args.join(' ')} #{ROOT_DIR}"
+  VARIANTS.each do |image_name, params|
+    build_args = [
+      '--force-rm',
+      "--build-arg PASSENGER_UPSTREAM=#{params[:from]}",
+      "-t #{image_name}#{BUILD_TAG}",
+    ]
+    build_args << '--no-cache' unless (ENV['DOCKER_BUILD_NO_CACHE'] || '').empty?
+    sh "docker build #{build_args.join(' ')} #{ROOT_DIR}"
+  end
 end
 
 task :full => [:clobber, :build]
 
 task :test do
-  sh "docker run --rm #{IMAGE_NAME}#{BUILD_TAG} /sbin/my_init -- echo 'Success'"
+  VARIANTS.each_key do |image_name|
+    sh "docker run --rm #{image_name}#{BUILD_TAG} /sbin/my_init -- ruby --version"
+  end
 end
 
 task :push do
@@ -35,15 +38,9 @@ task :push do
 end
 
 def push_all(tag = nil)
-  push(IMAGE_NAME, tag)
-end
-
-def pull_all
-  pull(IMAGE_NAME)
-end
-
-def pull(image_name)
-  sh "docker pull #{image_name}#{BUILD_TAG}"
+  VARIANTS.each_key do |image_name|
+    push(image_name, tag)
+  end
 end
 
 def push(image_name, tag = nil)

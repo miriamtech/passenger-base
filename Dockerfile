@@ -1,4 +1,5 @@
-FROM phusion/passenger-ruby30:1.0.14
+ARG PASSENGER_UPSTREAM
+FROM $PASSENGER_UPSTREAM
 CMD ["/sbin/my_init"]
 
 RUN apt-get update \
