@@ -42,3 +42,7 @@ ADD scripts/policy-rc.d.rb /usr/sbin/policy-rc.d
 # See https://github.com/phusion/passenger-docker#default-wrapper-scripts
 ADD scripts/create_rvm_wrapper /usr/local/bin/create_rvm_wrapper
 RUN create_rvm_wrapper irb rails que
+
+# This has been fixed in baseimage-docker but hasn't made its way into passenger-docker yet.
+# See https://github.com/phusion/baseimage-docker/issues/584
+ADD logrotate.conf /etc/
