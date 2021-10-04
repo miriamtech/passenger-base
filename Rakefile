@@ -1,7 +1,7 @@
 require 'rake/clean'
 require 'tempfile'
 
-UPSTREAM_VERSION = '1.0.14'
+UPSTREAM_VERSION = '1.0.19'
 VARIANTS = {
   'miriamtech/passenger-ruby25': { from: "phusion/passenger-ruby25:#{UPSTREAM_VERSION}" },
   'miriamtech/passenger-ruby27': { from: "phusion/passenger-ruby27:#{UPSTREAM_VERSION}" },
