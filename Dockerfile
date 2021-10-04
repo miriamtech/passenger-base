@@ -2,7 +2,11 @@ ARG PASSENGER_UPSTREAM
 FROM $PASSENGER_UPSTREAM
 CMD ["/sbin/my_init"]
 
-RUN apt-get update \
+RUN mv /etc/apt/sources.list.d/passenger.list /tmp \
+    && apt-get update \
+    && apt-get -y install ca-certificates \
+    && mv /tmp/passenger.list /etc/apt/sources.list.d/ \
+    && apt-get update \
     && apt-get -y purge openssh-server openssh-sftp-server \
     && apt-get -y upgrade -o Dpkg::Options::="--force-confold" \
     && apt-get clean
