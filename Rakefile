@@ -22,7 +22,7 @@ task :build do
       "--build-arg PASSENGER_UPSTREAM=#{params[:from]}",
       "-t #{image_name}#{BUILD_TAG}",
     ]
-    build_args << '--no-cache' unless (ENV['DOCKER_BUILD_NO_CACHE'] || '').empty?
+    build_args << '--no-cache' if !ENV.fetch('DOCKER_BUILD_NO_CACHE', '').empty? || ENV.fetch('GO_TRIGGER_USER') == 'timer'
     sh "docker build #{build_args.join(' ')} #{ROOT_DIR}"
   end
 end
