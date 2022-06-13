@@ -1,11 +1,14 @@
 require 'rake/clean'
 require 'tempfile'
 
-UPSTREAM_VERSION = '1.0.19'
+UPSTREAM_VERSION_1 = '1.0.19'
+UPSTREAM_VERSION_2 = '2.3.0'
+
 VARIANTS = {
-  'miriamtech/passenger-ruby25': { from: "phusion/passenger-ruby25:#{UPSTREAM_VERSION}" },
-  'miriamtech/passenger-ruby27': { from: "phusion/passenger-ruby27:#{UPSTREAM_VERSION}" },
-  'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby25': { from: "phusion/passenger-ruby25:#{UPSTREAM_VERSION_1}" },
+  'miriamtech/passenger-ruby27': { from: "phusion/passenger-ruby27:#{UPSTREAM_VERSION_1}" },
+  'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{UPSTREAM_VERSION_1}" },
+  'miriamtech/passenger-ruby31': { from: "phusion/passenger-ruby31:#{UPSTREAM_VERSION_2}" },
 }
 ROOT_DIR = File.expand_path('.')
 BUILD_TAG = ENV['GO_REVISION_GITHUB'] ? ":#{ENV['GO_REVISION_GITHUB'].slice(0, 7)}" : ''
