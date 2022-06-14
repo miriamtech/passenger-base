@@ -11,7 +11,7 @@ VARIANTS = {
   'miriamtech/passenger-ruby31': { from: "phusion/passenger-ruby31:#{UPSTREAM_VERSION_2}" },
 }
 ROOT_DIR = File.expand_path('.')
-BUILD_TAG = ENV['GO_REVISION_GITHUB'] ? ":#{ENV['GO_REVISION_GITHUB'].slice(0, 7)}" : ''
+BUILD_TAG = ENV['GO_REVISION_SOURCE'] ? ":#{ENV['GO_REVISION_SOURCE'].slice(0, 7)}" : ''
 
 task :default => :test
 
