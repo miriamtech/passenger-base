@@ -5,7 +5,7 @@ UPSTREAM_VERSION_1 = '1.0.19'
 UPSTREAM_VERSION_2 = '2.3.0'
 
 VARIANTS = {
-  'miriamtech/passenger-ruby25': { from: "phusion/passenger-ruby25:#{UPSTREAM_VERSION_1}" },
+  'miriamtech/passenger-ruby25': { from: "phusion/passenger-ruby25:#{UPSTREAM_VERSION_1}", rubygems_version: '3.3.26' },
   'miriamtech/passenger-ruby27': { from: "phusion/passenger-ruby27:#{UPSTREAM_VERSION_1}" },
   'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{UPSTREAM_VERSION_1}" },
   'miriamtech/passenger-ruby31': { from: "phusion/passenger-ruby31:#{UPSTREAM_VERSION_2}" },
@@ -22,6 +22,7 @@ task :build do
       "--build-arg PASSENGER_UPSTREAM=#{params[:from]}",
       "-t #{image_name}#{BUILD_TAG}",
     ]
+    build_args << "--build-arg RUBYGEMS_VERSION=#{params[:rubygems_version]}" if params[:rubygems_version]
     build_args << '--no-cache' if !ENV.fetch('DOCKER_BUILD_NO_CACHE', '').empty? || ENV.fetch('GO_TRIGGER_USER') == 'timer'
     sh "docker build #{build_args.join(' ')} #{ROOT_DIR}"
   end

@@ -12,7 +12,8 @@ RUN mv /etc/apt/sources.list.d/passenger.list /tmp \
     && apt-get clean
 
 # Install latest rubygems and bundler
-RUN gem update --system \
+ARG RUBYGEMS_VERSION
+RUN gem update --system $RUBYGEMS_VERSION \
     && gem uninstall rubygems-update \
     && gem install bundler \
     && gem pristine --all
