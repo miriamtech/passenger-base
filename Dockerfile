@@ -48,6 +48,9 @@ ADD scripts/policy-rc.d.rb /usr/sbin/policy-rc.d
 ADD scripts/create_rvm_wrapper /usr/local/bin/create_rvm_wrapper
 RUN create_rvm_wrapper irb rails que
 
+# Enable serving gzip-compressed static assets
+ADD serve-gzip-static-assets.conf /etc/nginx/conf.d/
+
 # This has been fixed in baseimage-docker but hasn't made its way into passenger-docker yet.
 # See https://github.com/phusion/baseimage-docker/issues/584
 ADD logrotate.conf /etc/

@@ -23,7 +23,7 @@ task :build do
       "-t #{image_name}#{BUILD_TAG}",
     ]
     build_args << "--build-arg RUBYGEMS_VERSION=#{params[:rubygems_version]}" if params[:rubygems_version]
-    build_args << '--no-cache' if !ENV.fetch('DOCKER_BUILD_NO_CACHE', '').empty? || ENV.fetch('GO_TRIGGER_USER') == 'timer'
+    build_args << '--no-cache' if !ENV.fetch('DOCKER_BUILD_NO_CACHE', '').empty? || ENV['GO_TRIGGER_USER'] == 'timer'
     sh "docker build #{build_args.join(' ')} #{ROOT_DIR}"
   end
 end
