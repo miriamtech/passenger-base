@@ -11,12 +11,13 @@ RUN mv /etc/apt/sources.list.d/passenger.list /tmp \
     && apt-get -y upgrade -o Dpkg::Options::="--force-confold" \
     && apt-get clean
 
-# Install latest rubygems and bundler
+# Install latest rubygems and bundler and remove unused global gems
 ARG RUBYGEMS_VERSION
 RUN gem update --system $RUBYGEMS_VERSION \
     && gem uninstall rubygems-update \
     && gem install bundler \
-    && gem pristine --all
+    && gem pristine --all \
+    && rvm-exec @global gem uninstall rack
 
 # Add postmark_sendmail files for mailing from cron
 RUN apt-get install -y msmtp
