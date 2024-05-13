@@ -14,6 +14,7 @@ VARIANTS = {
   'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{UPSTREAM_VERSION}" },
   'miriamtech/passenger-ruby31': { from: "phusion/passenger-ruby31:#{UPSTREAM_VERSION}" },
   'miriamtech/passenger-ruby32': { from: "phusion/passenger-ruby32:#{UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby33': { from: "phusion/passenger-ruby33:#{UPSTREAM_VERSION}" },
 }
 ROOT_DIR = File.expand_path('.')
 BUILD_TAG = ENV['GO_REVISION_SOURCE'] ? ":#{ENV['GO_REVISION_SOURCE'].slice(0, 7)}" : ''
