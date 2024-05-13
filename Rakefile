@@ -1,7 +1,7 @@
 require 'rake/clean'
 require 'tempfile'
 
-UPSTREAM_VERSION = '2.6.0'
+UPSTREAM_VERSION = '2.6.2'
 
 VARIANTS = {
   # Ruby 2.5 went EOL in April 2021. Support was dropped in Passenger 2.0 and Rubygems 3.4.0
