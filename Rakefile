@@ -1,7 +1,8 @@
 require 'rake/clean'
 require 'tempfile'
 
-UPSTREAM_VERSION = '2.6.2'
+LEGACY_UPSTREAM_VERSION = '2.6.2'
+UPSTREAM_VERSION = '3.1.2'
 
 VARIANTS = {
   # Ruby 2.5 went EOL in April 2021. Support was dropped in Passenger 2.0 and Rubygems 3.4.0
@@ -11,10 +12,11 @@ VARIANTS = {
   'miriamtech/passenger-ruby27': { from: "phusion/passenger-ruby27:2.5.1", rubygems_version: '3.4.22' },
 
   # Current versions
-  'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{UPSTREAM_VERSION}" },
-  'miriamtech/passenger-ruby31': { from: "phusion/passenger-ruby31:#{UPSTREAM_VERSION}" },
-  'miriamtech/passenger-ruby32': { from: "phusion/passenger-ruby32:#{UPSTREAM_VERSION}" },
-  'miriamtech/passenger-ruby33': { from: "phusion/passenger-ruby33:#{UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby30': { from: "phusion/passenger-ruby30:#{LEGACY_UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby31': { from: "phusion/passenger-ruby31:#{LEGACY_UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby32': { from: "phusion/passenger-ruby32:#{LEGACY_UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby33': { from: "phusion/passenger-ruby33:#{LEGACY_UPSTREAM_VERSION}" },
+  'miriamtech/passenger-ruby34': { from: "phusion/passenger-ruby34:#{UPSTREAM_VERSION}" },
 }
 ROOT_DIR = File.expand_path('.')
 BUILD_TAG = ENV['GO_REVISION_SOURCE'] ? ":#{ENV['GO_REVISION_SOURCE'].slice(0, 7)}" : ''
